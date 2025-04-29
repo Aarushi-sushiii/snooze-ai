@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Reverse Image Search (Static Demo)</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f9f9f9; margin: 0; padding: 0; }
+        .container { max-width: 600px; margin: 40px auto; background: #fff; box-shadow: 0 2px 8px #ccc; border-radius: 8px; padding: 30px; }
+        h2 { text-align: center; }
+        .results { margin-top: 30px; }
+        .result-item { display: flex; align-items: center; margin-bottom: 16px; background: #f1f1f1; padding: 10px; border-radius: 6px; }
+        .result-item img { width: 80px; height: 80px; object-fit: cover; border-radius: 6px; margin-right: 16px; border: 1px solid #ddd; }
+        .result-info { flex: 1; }
+        .result-info a { color: #007bff; text-decoration: none; font-weight: bold; }
+        .result-info a:hover { text-decoration: underline; }
+        .upload-section { text-align: center; margin-bottom: 24px; }
+        input[type="file"] { margin-bottom: 10px; }
+        button { background: #007bff; color: #fff; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-size: 16px; }
+        button:disabled { background: #ccc; }
+        .error { color: red; text-align: center; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Reverse Image Search (Static Demo)</h2>
+        <div class="upload-section">
+            <input type="file" id="imageInput" accept="image/*">
+            <br>
+            <button id="uploadBtn">Upload and Search</button>
+        </div>
+        <div class="error" id="errorMsg"></div>
+        <div class="results" id="results"></div>
+    </div>
+    <script>
+        const uploadBtn = document.getElementById('uploadBtn');
+        const imageInput = document.getElementById('imageInput');
+        const resultsDiv = document.getElementById('results');
+        const errorMsg = document.getElementById('errorMsg');
+
+        // Sample dummy results
+        const sampleResults = [
+            {
+                title: "Sample Flower 1",
+                url: "https://unsplash.com/photos/1",
+                image_url: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80"
+            },
+            {
+                title: "Sample Flower 2",
+                url: "https://unsplash.com/photos/2",
+                image_url: "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80"
+            },
+            {
+                title: "Sample Flower 3",
+                url: "https://unsplash.com/photos/3",
+                image_url: "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=400&q=80"
+            },
+            {
+                title: "Sample Flower 4",
+                url: "https://unsplash.com/photos/4",
+                image_url: "https://images.unsplash.com/photo-1465101178521-c1a9136a3b99?auto=format&fit=crop&w=400&q=80"
+            },
+            {
+                title: "Sample Flower 5",
+                url: "https://unsplash.com/photos/5",
+                image_url: "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80"
+            }
+        ];
+
+        uploadBtn.onclick = () => {
+            errorMsg.textContent = '';
+            resultsDiv.innerHTML = '';
+            if (!imageInput.files.length) {
+                errorMsg.textContent = 'Please select an image.';
+                return;
+            }
+            uploadBtn.disabled = true;
+            setTimeout(() => { // Simulate processing delay
+                resultsDiv.innerHTML = sampleResults.map(item => `
+                    <div class="result-item">
+                        <img src="${item.image_url}" alt="Result image">
+                        <div class="result-info">
+                            <div><a href="${item.url}" target="_blank">${item.title}</a></div>
+                            <div><a href="${item.image_url}" target="_blank">View Image</a></div>
+                        </div>
+                    </div>
+                `).join('');
+                uploadBtn.disabled = false;
+            }, 1200);
+        };
+    </script>
+</body>
+</html>

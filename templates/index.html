@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Snooze Reverse Image Search</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(180deg, #ffe2ec 0%, #fbefff 100%);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            position: relative;
+        }
+        /* Decorative pastel wave (placeholder) */
+        .wave {
+            width: 100%;
+            height: 120px;
+            background: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 0;
+        }
+        .flower {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            background: radial-gradient(circle at 50% 50%, #ffd6e0 60%, #fff0f5 100%);
+            border-radius: 50%;
+            left: 10vw;
+            top: 30px;
+            opacity: 0.6;
+            z-index: 1;
+        }
+        .flower2 {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background: radial-gradient(circle at 50% 50%, #fbefff 60%, #ffe2ec 100%);
+            border-radius: 50%;
+            right: 12vw;
+            top: 100px;
+            opacity: 0.5;
+            z-index: 1;
+        }
+        .container {
+            max-width: 420px;
+            margin: 120px auto 40px auto;
+            background: #fff6faee;
+            box-shadow: 0 4px 32px #e9b3c5a0;
+            border-radius: 18px;
+            padding: 36px 28px 32px 28px;
+            position: relative;
+            z-index: 2;
+        }
+        h2 {
+            text-align: center;
+            font-size: 2.3rem;
+            color: #e87ca4;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #b88ca7;
+            font-size: 1.1rem;
+            margin-bottom: 24px;
+        }
+        .upload-section {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+        input[type="file"] {
+            margin-bottom: 12px;
+            border: none;
+            background: #fbefff;
+            padding: 8px 0;
+            border-radius: 8px;
+        }
+        button {
+            background: linear-gradient(90deg, #e87ca4 0%, #fbb1c8 100%);
+            color: #fff;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: bold;
+            box-shadow: 0 2px 8px #e9b3c5a0;
+            transition: background 0.2s;
+        }
+        button:disabled {
+            background: #f3c3d6;
+            color: #fff;
+        }
+        .error {
+            color: #e87ca4;
+            text-align: center;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        .results {
+            margin-top: 32px;
+        }
+        .result-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 18px;
+            background: #fff0f5;
+            padding: 12px;
+            border-radius: 10px;
+            box-shadow: 0 1px 6px #fbb1c855;
+        }
+        .result-item img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-right: 18px;
+            border: 2px solid #ffd6e0;
+            background: #fff6fa;
+        }
+        .result-info { flex: 1; }
+        .result-info a {
+            color: #e87ca4;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.08rem;
+        }
+        .result-info a:hover { text-decoration: underline; }
+        .result-title {
+            margin-bottom: 2px;
+        }
+        @media (max-width: 600px) {
+            .container { padding: 18px 5vw; }
+            .result-item img { width: 60px; height: 60px; margin-right: 12px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="wave">
+        <!-- Placeholder SVG for wave -->
+        <svg width="100%" height="120" viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0,80 Q360,120 720,80 T1440,80 V120 H0 Z" fill="#ffe2ec"/>
+        </svg>
+    </div>
+    <div class="flower"></div>
+    <div class="flower2"></div>
+    <div class="container">
+        <h2>Snooze</h2>
+        <div class="subtitle">Reverse Image Search – Cozy, Soft, and Dreamy</div>
+        <div class="upload-section">
+            <input type="file" id="imageInput" accept="image/*">
+            <br>
+            <button id="uploadBtn">Upload and Search</button>
+        </div>
+        <div class="error" id="errorMsg"></div>
+        <div class="results" id="results"></div>
+    </div>
+    <script>
+        const uploadBtn = document.getElementById('uploadBtn');
+        const imageInput = document.getElementById('imageInput');
+        const resultsDiv = document.getElementById('results');
+        const errorMsg = document.getElementById('errorMsg');
+
+        uploadBtn.onclick = async () => {
+            errorMsg.textContent = '';
+            resultsDiv.innerHTML = '';
+            if (!imageInput.files.length) {
+                errorMsg.textContent = 'Please select an image.';
+                return;
+            }
+            uploadBtn.disabled = true;
+            const formData = new FormData();
+            formData.append('file', imageInput.files[0]);
+            try {
+                const res = await fetch('/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await res.json();
+                if (data.error) {
+                    errorMsg.textContent = data.error;
+                } else {
+                    resultsDiv.innerHTML = data.results.map(item => `
+                        <div class="result-item">
+                            <img src="${item.image_url}" alt="Result image">
+                            <div class="result-info">
+                                <div class="result-title"><a href="${item.url}" target="_blank">${item.title}</a></div>
+                                <div><a href="${item.image_url}" target="_blank">View Image</a></div>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            } catch (e) {
+                errorMsg.textContent = 'Error uploading or processing image.';
+            }
+            uploadBtn.disabled = false;
+        };
+    </script>
+</body>
+</html>

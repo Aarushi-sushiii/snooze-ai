@@ -1,0 +1,10 @@
+flask
+werkzeug
+tensorflow
+pandas
+numpy
+scikit-learn
+pillow
+requests
+tqdm
+matplotlib
