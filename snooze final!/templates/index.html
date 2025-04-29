@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Reverse Image Search</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f9f9f9; margin: 0; padding: 0; }
+        .container { max-width: 600px; margin: 40px auto; background: #fff; box-shadow: 0 2px 8px #ccc; border-radius: 8px; padding: 30px; }
+        h2 { text-align: center; }
+        .results { margin-top: 30px; }
+        .result-item { display: flex; align-items: center; margin-bottom: 16px; background: #f1f1f1; padding: 10px; border-radius: 6px; }
+        .result-item img { width: 80px; height: 80px; object-fit: cover; border-radius: 6px; margin-right: 16px; border: 1px solid #ddd; }
+        .result-info { flex: 1; }
+        .result-info a { color: #007bff; text-decoration: none; font-weight: bold; }
+        .result-info a:hover { text-decoration: underline; }
+        .upload-section { text-align: center; margin-bottom: 24px; }
+        input[type="file"] { margin-bottom: 10px; }
+        button { background: #007bff; color: #fff; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-size: 16px; }
+        button:disabled { background: #ccc; }
+        .error { color: red; text-align: center; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Reverse Image Search</h2>
+        <div class="upload-section">
+            <input type="file" id="imageInput" accept="image/*">
+            <br>
+            <button id="uploadBtn">Upload and Search</button>
+        </div>
+        <div class="error" id="errorMsg"></div>
+        <div class="results" id="results"></div>
+    </div>
+    <script>
+        const uploadBtn = document.getElementById('uploadBtn');
+        const imageInput = document.getElementById('imageInput');
+        const resultsDiv = document.getElementById('results');
+        const errorMsg = document.getElementById('errorMsg');
+
+        uploadBtn.onclick = async () => {
+            errorMsg.textContent = '';
+            resultsDiv.innerHTML = '';
+            if (!imageInput.files.length) {
+                errorMsg.textContent = 'Please select an image.';
+                return;
+            }
+            uploadBtn.disabled = true;
+            const formData = new FormData();
+            formData.append('file', imageInput.files[0]);
+            try {
+                const res = await fetch('/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await res.json();
+                if (data.error) {
+                    errorMsg.textContent = data.error;
+                } else {
+                    resultsDiv.innerHTML = data.results.map(item => `
+                        <div class="result-item">
+                            <img src="${item.image_url}" alt="Result image">
+                            <div class="result-info">
+                                <div><a href="${item.url}" target="_blank">${item.title}</a></div>
+                                <div><a href="${item.image_url}" target="_blank">View Image</a></div>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            } catch (e) {
+                errorMsg.textContent = 'Error uploading or processing image.';
+            }
+            uploadBtn.disabled = false;
+        };
+    </script>
+</body>
+</html>
