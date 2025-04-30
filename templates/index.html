@@ -136,9 +136,30 @@
             .container { padding: 18px 5vw; }
             .result-item img { width: 60px; height: 60px; margin-right: 12px; }
         }
-    </style>
+    .go-back-btn {
+    position: absolute;
+    top: 28px;
+    left: 32px;
+    background: linear-gradient(90deg, #e87ca4 0%, #fbb1c8 100%);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 24px;
+    font-size: 1.05rem;
+    font-weight: bold;
+    box-shadow: 0 2px 8px #e9b3c540;
+    cursor: pointer;
+    z-index: 20;
+    transition: background 0.15s, transform 0.1s;
+}
+.go-back-btn:hover {
+    background: #e87ca4;
+    transform: scale(1.04);
+}
+</style>
 </head>
 <body>
+    <button onclick="location.href='/'" class="go-back-btn">&#8592; Go Back</button>
     <div class="wave">
         <!-- Placeholder SVG for wave -->
         <svg width="100%" height="120" viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg">

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Snooze | Sign Up</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(180deg, #ffe2ec 0%, #fbefff 100%);
+            min-height: 100vh;
+            margin: 0;
+        }
+        .container {
+            max-width: 400px;
+            margin: 110px auto 0 auto;
+            background: #fff6faee;
+            box-shadow: 0 4px 32px #e9b3c5a0;
+            border-radius: 18px;
+            padding: 36px 28px 32px 28px;
+        }
+        h2 {
+            text-align: center;
+            color: #e87ca4;
+            font-size: 2rem;
+            margin-bottom: 12px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #b88ca7;
+            font-size: 1.08rem;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            color: #b88ca7;
+            font-size: 1.03rem;
+            display: block;
+            margin-bottom: 7px;
+        }
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1.5px solid #ffd6e0;
+            background: #fbefff;
+            font-size: 1rem;
+        }
+        .signup-btn {
+            background: linear-gradient(90deg, #e87ca4 0%, #fbb1c8 100%);
+            color: #fff;
+            border: none;
+            padding: 12px 0;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px #e9b3c5a0;
+        }
+        .signup-btn:hover {
+            background: #e87ca4;
+        }
+        .login-link {
+            text-align: center;
+            color: #b88ca7;
+            font-size: 1rem;
+        }
+        .login-link a {
+            color: #e87ca4;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Sign Up for Snooze</h2>
+        <div class="subtitle">Create your cozy account to get started.</div>
+        <form id="signupForm">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <button type="submit" class="signup-btn">Sign Up</button>
+        </form>
+        <div class="login-link">
+            Already have an account? <a href="/login">Login</a>
+        </div>
+    </div>
+    <script>
+        document.getElementById('signupForm').onsubmit = function(e) {
+            e.preventDefault();
+            // For demo, just redirect to main functionality page
+            window.location.href = "/main";
+        };
+    </script>
+</body>
+</html>
