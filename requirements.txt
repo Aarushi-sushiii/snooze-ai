@@ -8,3 +8,5 @@ pillow
 requests
 tqdm
 matplotlib
+tf-keras
+transformers<4.40.0

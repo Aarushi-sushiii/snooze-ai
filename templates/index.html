@@ -176,6 +176,12 @@
             <br>
             <button id="uploadBtn">Upload and Search</button>
         </div>
+        <div class="text-search-section" style="margin-top: 22px; text-align: center;">
+            <input type="text" id="textSearchInput" placeholder="Describe what you want to find (e.g., cozy pink sweater)" style="width: 80%; max-width: 340px; padding: 10px 14px; border-radius: 8px; border: 1.5px solid #e87ca4; background: #fbefff; font-size: 1.08rem; margin-bottom: 8px;">
+            <br>
+            <button id="textSearchBtn" style="margin-top: 2px; background: linear-gradient(90deg, #b88ca7 0%, #e87ca4 100%); color: #fff;">Search by Text</button>
+        </div>
+        <div class="results" id="textResults"></div>
         <div class="error" id="errorMsg"></div>
         <div class="results" id="results"></div>
     </div>
@@ -184,6 +190,44 @@
         const imageInput = document.getElementById('imageInput');
         const resultsDiv = document.getElementById('results');
         const errorMsg = document.getElementById('errorMsg');
+        const textSearchBtn = document.getElementById('textSearchBtn');
+        const textSearchInput = document.getElementById('textSearchInput');
+        const textResultsDiv = document.getElementById('textResults');
+
+        textSearchBtn.onclick = async () => {
+            const query = textSearchInput.value.trim();
+            textResultsDiv.innerHTML = '';
+            errorMsg.textContent = '';
+            if (!query) {
+                errorMsg.textContent = 'Please enter a description.';
+                return;
+            }
+            textSearchBtn.disabled = true;
+            try {
+                const res = await fetch('/text_search', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ query })
+                });
+                const data = await res.json();
+                if (data.error) {
+                    errorMsg.textContent = data.error;
+                } else {
+                    textResultsDiv.innerHTML = data.results.map(item => `
+                        <div class="result-item">
+                            <img src="${item.image_url}" alt="Result image">
+                            <div class="result-info">
+                                <div class="result-title"><a href="${item.url}" target="_blank">${item.title}</a></div>
+                                <div><a href="${item.image_url}" target="_blank">View Image</a></div>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            } catch (e) {
+                errorMsg.textContent = 'Error searching by text.';
+            }
+            textSearchBtn.disabled = false;
+        };
 
         uploadBtn.onclick = async () => {
             errorMsg.textContent = '';
